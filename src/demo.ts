@@ -50,14 +50,16 @@ initButton.addEventListener("click", () => {
 
 // Modal nav
 
-document.querySelectorAll("#modal-nav a").forEach((link) => {
-  link.addEventListener("click", (e) => {
-    e.preventDefault();
-    const target = document.querySelector(link.getAttribute("href") || "");
-    if (target) {
-      close().then(() => {
-        target.scrollIntoView({ behavior: "smooth" });
-      });
-    }
+document
+  .querySelectorAll("#modal-nav .nav__link, #modal-nav .nav__logo")
+  .forEach((link) => {
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      const target = document.querySelector(link.getAttribute("href") || "");
+      if (target) {
+        close().then(() => {
+          target.scrollIntoView({ behavior: "smooth" });
+        });
+      }
+    });
   });
-});

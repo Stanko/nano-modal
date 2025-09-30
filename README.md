@@ -1,8 +1,7 @@
 # Nano Modal
 
-## TODO
+A tiny (850 bytes), opinionated modal library.
 
-* [ ] Separate duration open and close duration
-* [ ] Scroll is saved between modal open/close - mention in the readme
-* [ ] Switch computed style to reading a CSS duration property
-* [ ] Explain no-op `transition: transform var(--nm-duration)` on `.nano-modal`
+Written in TypeScript. Visit [muffinman.io/nano-modal/](https://muffinman.io/nano-modal/) for the demo and documentation.
+
+![](./public/nano.png)
