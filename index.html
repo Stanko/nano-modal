@@ -1,0 +1,682 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NanoModal</title>
+    <meta
+      name="description"
+      content="NanoModal is a tiny, no dependency library for creating accessible modals using the native <dialog> element."
+    />
+    <link
+      href="https://muffinman.io/favicon/red/icon-32.ico"
+      rel="icon"
+      sizes="any"
+    />
+    <link
+      href="https://muffinman.io/favicon/red/icon.svg"
+      rel="icon"
+      type="image/svg+xml"
+    />
+    <link
+      href="https://muffinman.io/favicon/red/icon-180.png"
+      rel="apple-touch-icon"
+    />
+    <link
+      href="https://muffinman.io/favicon/red/manifest.webmanifest"
+      rel="manifest"
+    />
+
+    <meta
+      content="https://muffinman.io/nano-modal/nano.png"
+      property="twitter:image"
+    />
+    <meta
+      content="https://muffinman.io/nano-modal/nano.png"
+      property="og:image"
+    />
+  </head>
+  <body>
+    <div class="stripe" aria-hidden="true"></div>
+
+    <div class="page" id="top">
+      <nav class="nav">
+        <a class="nav__logo" href="#top">
+          <span>N</span>
+        </a>
+        <a class="nav__link" href="#top">NanoModal</a>
+        <a class="nav__link" href="#examples">Examples</a>
+        <a class="nav__link" href="#usage">Usage</a>
+        <a class="nav__link" href="#api">API</a>
+        <a class="nav__link" href="#styling">Styling</a>
+      </nav>
+
+      <main class="main">
+        <button data-nm-open="modal-nav" class="nav__trigger">
+          <svg viewBox="0 0 15 10" fill="currentColor">
+            <rect x="0" y="0" rx="1" ry="1" width="15" height="2" />
+            <rect x="0" y="4" rx="1" ry="1" width="15" height="2" />
+            <rect x="0" y="8" rx="1" ry="1" width="15" height="2" />
+          </svg>
+        </button>
+
+        <header>
+          <h1 class="h1">Nano<span class="accent-1">Modal</span></h1>
+
+          <h2 class="h2">
+            A sane, <span class="accent-2">vanilla modal</span> using the native
+            <code>&lt;dialog&gt;</code> element
+          </h2>
+        </header>
+
+        <div class="content">
+          <p>
+            <b>NanoModal</b> is a tiny library for creating modal dialogs using
+            the native <code>&lt;dialog&gt;</code> element. It consists of
+            around 100 lines of TypeScript and weighs about 850 bytes minified
+            and gzipped.
+          </p>
+
+          <div class="demo-modal-trigger">
+            <button class="btn btn--lg" data-nm-open="modal-base">
+              Open demo
+            </button>
+          </div>
+
+          <h2 class="accent-1">Features:</h2>
+
+          <ul>
+            <li>Fully accessible</li>
+            <li>Customizable CSS animations</li>
+            <li>Maintains body scroll position</li>
+            <li>Prevents content jumps due to the scrollbar width</li>
+            <li>Overlay click and <code>Escape</code> press close the modal</li>
+            <li>Scrollbar on full viewport and a sticky close button</li>
+            <li>
+              Standardizes cross-browser
+              <code>&lt;dialog&gt;</code> implementation quirks
+            </li>
+          </ul>
+
+          <p>It also inherits native dialog features:</p>
+
+          <ul>
+            <li>Focus trap</li>
+            <li>Scroll restoration when a modal is opened again</li>
+            <li>Focusing the first focusable element</li>
+            <li>Restoring the focus on close</li>
+          </ul>
+
+          <h2 class="accent-1" id="examples">Examples:</h2>
+
+          <h3>Unstyled modal</h3>
+          <p>
+            Nano includes minimal styling with a fade animation. It is meant to
+            be used with the provided base theme or a custom theme.
+          </p>
+
+          <button class="btn btn--lg" data-nm-open="modal-unstyled">
+            Open the unstyled modal
+          </button>
+
+          <h3>Base theme</h3>
+          <p>
+            The base theme is provided. It is simple and includes basic
+            responsive styles for positioning, animation and border radius.
+            Everything is easy to customize or override.
+          </p>
+          <p>Padding and typography in this example are added separately.</p>
+
+          <button class="btn btn--lg" data-nm-open="modal-base">
+            Open the base themed modal
+          </button>
+
+          <h3>Scrollable content</h3>
+
+          <p>
+            Nano uses the scrollbar on the full viewport for a nicer user
+            experience. The optional close button is sticky by default.
+          </p>
+
+          <button class="btn btn--lg" data-nm-open="modal-long">
+            Open modal with scrollable content
+          </button>
+
+          <h3>Custom styles</h3>
+
+          <p>
+            You can customize the modal looks and animation using CSS. Check out
+            the <a href="#styling">styling section</a> below.
+          </p>
+
+          <button class="btn btn--lg" data-nm-open="modal-custom-styles">
+            Open modal with custom styles
+          </button>
+
+          <h3>Nested modals</h3>
+          <p>
+            Nano allows you to open a modal from another modal. The current
+            modal will closes automatically. Like Highlander, there can be only
+            one.
+          </p>
+          <p>
+            Please note that when opening a modal from another, focus will not
+            be restored to the original trigger once the last are closed. This
+            is outside the scope of the library. However, you can use returned
+            promises to implement it yourself.
+          </p>
+
+          <button class="btn btn--lg" data-nm-open="modal-from-modal-1">
+            Open modal with nested modal
+          </button>
+
+          <h2 class="accent-1" id="usage">Usage</h2>
+
+          <h3>Add the required HTML</h3>
+
+          <pre><code class="language-html">&lt;!-- Single backdrop element, all Nano modals share it -->
+&lt;div class="nano-modal__backdrop">&lt;/div>
+
+&lt;!-- Modal -->
+&lt;dialog
+  id="modal"
+  class="nano-modal nano-modal--base"
+  aria-label="NanoModal example"
+>
+  &lt;div class="nano-modal__wrapper">
+    &lt;div class="nano-modal__content">
+
+      &lt;!-- Optional close button -->
+      &lt;button data-nm-close class="nano-modal__close-button">
+        Close
+      &lt;/button>
+
+      &lt;!-- Content goes here -->
+    &lt;/div>
+  &lt;/div>
+&lt;/dialog></code></pre>
+
+          <h3>Add data attributes</h3>
+
+          <p>
+            To create an open button, add
+            <code>data-nm-open="my-modal"</code> attribute to an element. The
+            value should be the <code>id</code> of the modal you want to open
+            (<code>my-modal</code> in the example below).
+          </p>
+
+          <pre><code class="language-html">&lt;button data-nm-open="my-modal">Open Modal&lt;/button></code></pre>
+
+          <p>
+            To create a close button, add
+            <code>data-nm-close</code> attribute to an element. As only one
+            modal can be opened at a time, no need to specify the modal id.
+          </p>
+
+          <pre><code class="language-html">&lt;button data-nm-close>Close Modal&lt;/button></code></pre>
+
+          <h3>Initialize it</h3>
+
+          <p>
+            Then initialize Nano. It will attach all necessary event listeners
+            to the elements with the data attributes.
+          </p>
+
+          <pre><code class="language-typescript">// Import the library
+import { init } from '@stanko/nano-modal';
+
+// Import CSS
+import "@stanko/nano-modal/dist/nano-modal.css";
+
+// Initialize NanoModal
+init();</code></pre>
+
+          <p>
+            If you dynamically add more elements with data attributes, call the
+            <code>init()</code> function again.
+          </p>
+
+          <h3 id="api">API</h3>
+
+          <p>
+            If you want to control modals manually, the library provides three
+            functions:
+          </p>
+
+          <ul>
+            <li>
+              <code>init()</code>: Attaches event listeners to open and close
+              buttons with data attributes.
+            </li>
+            <li>
+              <code>open(modal: HTMLDialogElement)</code>: Opens the modal.
+              Returns a promise that resolves when the modal is open.
+            </li>
+            <li>
+              <code>close()</code>: Closes the open modal, if any. Returns a
+              promise that resolves when the modal is closed.
+            </li>
+          </ul>
+
+          <p>Here is a dummy example:</p>
+
+          <pre><code class="language-typescript">import { init, open, close } from "@stanko/nano-modal";
+
+// Attaches events to all elements with data-nm-open/close attributes
+init();
+
+// Opens the contact modal
+const openModal = document.querySelector("#contact-open");
+const modal = document.querySelector("#contact-modal");
+
+openModal.addEventListener("click", () => {
+  open(modal);
+});
+
+// Closes the modal on form submit
+const form = document.querySelector("#contact-form");
+
+form.addEventListener("submit", () => {
+  // Submit logic would go here
+  close();
+});
+</code></pre>
+
+          <h3>Accessibility</h3>
+
+          <p>
+            As dialog element takes care of things like focus trapping, you only
+            need to provide accessible name. Either by using
+            <code>aria-labelledby</code>:
+          </p>
+          <pre><code>aria-labelledby="id of visible HTML element"</code></pre>
+          <p>or inline with <code>aria-label</code></p>
+          <pre><code>aria-label="..."</code></pre>
+
+          <p>
+            Providing a description is optional. You can use
+            <code>aria-describedby</code> for a short description. For long
+            content, it is better to let the user navigate it instead.
+          </p>
+
+          <h2 class="accent-1" id="styling">Styling</h2>
+
+          <p>Nano exposes a few CSS variables for tweaking the base styles.</p>
+
+          <pre><code class="language-css">:root {
+  /* Backdrop (global, shared between all modals) */
+  --nm-backdrop-color: rgb(0 0 0 / 0.7);
+  --nm-backdrop-filter: blur(10px);
+
+  /* Scrollbar */
+  --nm-scrollbar-track-color: transparent;
+  --nm-scrollbar-thumb-color: rgb(255 255 255 / 0.5);
+
+  /* Content */
+  --nm-radius: 20px; /* Border radius used for the base theme */
+  --nm-max-width: 50rem;
+  --nm-background: white;
+
+  /* Animation */
+  --nm-duration: 350ms;
+
+  /* Close button */
+  --nm-close-top: 0; // Sticky position
+  --nm-close-margin: 0;
+}</code></pre>
+
+          <p>These are very handy in combination with the base theme.</p>
+
+          <h3>Custom theme</h3>
+
+          <p>
+            If you want to create a custom theme, start from the template below
+            and referring the base theme in the source code.
+          </p>
+
+          <pre><code class="language-css">/* A custom theme */
+.custom-modal[open] .nano-modal__content {
+  @starting-style {
+    /* Enter animation start */
+  }
+}
+
+.custom-modal[open].nano-modal--closing[open] .nano-modal__content {
+  /* Exit animation end */
+}
+
+.custom-modal .nano-modal__wrapper {
+  /* Content wrapper  */
+}
+
+.custom-modal .nano-modal__content {
+  /* Content */
+}
+
+.custom-modal .nano-modal__close-button {
+  /* Close button */
+}
+
+/*
+  Because the backdrop is shared between all modals,
+  you'll have to target it like this in order to customize it only for a specific modal
+*/
+:root:has(.custom-backdrop-modal[open]) {
+  /* Backdrop */
+}
+</code></pre>
+        </div>
+
+        <footer class="footer">
+          Made with ♡ by <a href="https://muffinman.io">Muffin Man</a>
+        </footer>
+      </main>
+    </div>
+
+    <div class="nano-modal__backdrop"></div>
+
+    <dialog
+      id="modal-nav"
+      class="nano-modal nano-modal--base"
+      aria-label="Navigation"
+    >
+      <div class="nano-modal__wrapper">
+        <div class="nano-modal__content">
+          <nav>
+            <a class="nav__logo" href="#top">
+              <span>N</span>
+            </a>
+            <a class="nav__link" href="#top">NanoModal</a>
+            <a class="nav__link" href="#examples">Examples</a>
+            <a class="nav__link" href="#usage">Usage</a>
+            <a class="nav__link" href="#api">API</a>
+            <a class="nav__link" href="#styling">Styling</a>
+          </nav>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog
+      id="modal-unstyled"
+      class="nano-modal"
+      aria-label="Unstyled NanoModal"
+    >
+      <div class="nano-modal__wrapper">
+        <div class="nano-modal__content">
+          <button
+            data-nm-close
+            class="nano-modal__close-button"
+            aria-label="Close modal"
+          >
+            Close
+          </button>
+
+          <h2>Unstyled Modal</h2>
+
+          <p>
+            Not much to see here, this is the minimal version without additional
+            styling.
+          </p>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog
+      id="modal-base"
+      class="nano-modal nano-modal--base"
+      aria-label="NanoModal using the base theme"
+    >
+      <div class="nano-modal__wrapper">
+        <div class="nano-modal__content">
+          <button
+            data-nm-close
+            class="nano-modal__close-button"
+            aria-label="Close modal"
+          >
+            Close
+          </button>
+
+          <h2>NanoModal</h2>
+
+          <p>
+            The base theme is simple and includes responsive styles for
+            positioning, animation and border radius
+          </p>
+          <p>Padding and typography in this example are added separately.</p>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog
+      id="modal-long"
+      class="nano-modal nano-modal--base"
+      aria-label="Long dummy content"
+    >
+      <div class="nano-modal__wrapper">
+        <div class="nano-modal__content">
+          <button
+            data-nm-close
+            class="nano-modal__close-button"
+            aria-label="Close modal"
+          >
+            Close
+          </button>
+
+          <h2>Long dummy content</h2>
+
+          <p>
+            NanoModal uses the scrollbar on the full viewport for a nicer user
+            experience. The optional close button is sticky by default.
+          </p>
+
+          <p aria-hidden="true">
+            Chocolate oat cake danish toffee sweet roll dragée brownie oat cake.
+            Sweet roll macaroon gummi bears caramels donut. Sugar plum pie candy
+            candy canes fruitcake tootsie roll muffin. Bonbon pudding sweet
+            sugar plum oat cake. Danish cake sugar plum danish chupa chups jelly
+            beans. Shortbread chupa chups soufflé jelly-o lemon drops. Cake
+            topping toffee ice cream shortbread tiramisu topping ice cream
+            gummies. Powder bear claw wafer caramels brownie bear claw croissant
+            tart. Halvah chocolate cake icing brownie carrot cake pudding
+            biscuit. Chocolate cake liquorice chocolate cake apple pie lemon
+            drops fruitcake ice cream cake. Danish chocolate bar pie muffin
+            candy canes liquorice jelly powder sweet. Macaroon jujubes soufflé
+            croissant macaroon lemon drops cotton candy tart brownie. Wafer
+            jujubes dessert oat cake muffin gingerbread candy chupa chups.
+            Pudding fruitcake topping chupa chups jelly topping candy canes.
+          </p>
+          <p aria-hidden="true">
+            Icing shortbread marzipan sugar plum cookie soufflé. Macaroon chupa
+            chups sugar plum brownie fruitcake. Bear claw chupa chups
+            marshmallow carrot cake marzipan shortbread topping toffee biscuit.
+            Candy canes tiramisu brownie halvah pastry jujubes lollipop caramels
+            wafer. Sweet roll candy canes oat cake toffee croissant cupcake.
+            Jelly beans chocolate bar chocolate bar tart bonbon macaroon
+            chocolate bar marshmallow. Apple pie oat cake apple pie halvah
+            soufflé. Jujubes shortbread jelly apple pie ice cream liquorice
+            topping. Jelly beans soufflé liquorice danish dragée. Tootsie roll
+            halvah shortbread sugar plum chocolate. Croissant dragée cheesecake
+            sweet jelly-o marshmallow tiramisu. Lemon drops cookie dessert
+            marzipan sweet biscuit. Brownie dessert jelly-o sugar plum dessert.
+          </p>
+          <p aria-hidden="true">
+            Sugar plum dragée soufflé carrot cake cake chocolate shortbread oat
+            cake pastry. Powder cotton candy brownie tiramisu biscuit apple pie
+            donut cake. Cake cheesecake cupcake wafer croissant. Sesame snaps
+            wafer icing toffee dragée sweet roll biscuit. Sweet cotton candy
+            tootsie roll chocolate danish jelly beans. Gingerbread bonbon
+            cupcake sweet ice cream ice cream. Macaroon chocolate cake sesame
+            snaps fruitcake gummi bears. Marzipan tart chocolate sweet roll
+            marshmallow soufflé gummies sweet cotton candy. Carrot cake cookie
+            gummi bears chocolate gummies cotton candy sweet. Halvah tiramisu
+            chocolate cake powder ice cream. Oat cake cake apple pie jelly-o
+            macaroon cupcake oat cake halvah. Macaroon cupcake oat cake dragée
+            toffee carrot cake. Carrot cake danish carrot cake sesame snaps
+            powder marshmallow candy canes bonbon. Candy canes icing gummies
+            jelly-o chupa chups.
+          </p>
+          <p aria-hidden="true">
+            Donut caramels toffee jujubes muffin jelly-o tootsie roll
+            marshmallow. Dessert liquorice halvah pudding gummi bears sesame
+            snaps. Fruitcake carrot cake wafer cheesecake fruitcake carrot cake.
+            Pudding apple pie fruitcake sweet roll oat cake croissant sesame
+            snaps bear claw gummies. Oat cake biscuit sweet roll powder sweet
+            roll pudding pastry tiramisu caramels. Ice cream lemon drops soufflé
+            oat cake apple pie halvah jelly beans. Marzipan sugar plum jelly
+            beans ice cream tiramisu marzipan marzipan tootsie roll. Topping
+            candy canes icing oat cake croissant cupcake ice cream halvah. Gummi
+            bears apple pie chupa chups candy canes carrot cake macaroon. Donut
+            gummies chocolate cake wafer wafer sugar plum lemon drops
+            marshmallow. Chocolate croissant caramels chupa chups tiramisu
+            pastry chocolate bar. Tiramisu gummi bears liquorice apple pie
+            cookie jelly beans jelly beans. Sugar plum chupa chups danish
+            lollipop jujubes.
+          </p>
+          <p aria-hidden="true">
+            Topping chupa chups chocolate bar ice cream sweet gingerbread
+            pudding sugar plum. Fruitcake tart sugar plum lemon drops croissant
+            chupa chups wafer pastry. Gummi bears cookie bonbon croissant
+            croissant toffee. Pastry jelly beans cake lollipop danish jelly-o
+            ice cream cookie carrot cake. Lemon drops sesame snaps powder wafer
+            liquorice. Chocolate cake marzipan sweet roll dessert lemon drops
+            candy canes chocolate bar. Bonbon soufflé dessert candy canes bear
+            claw brownie chupa chups sweet. Chocolate carrot cake marzipan
+            jelly-o cookie tiramisu. Dragée powder toffee tart bonbon sweet pie.
+            Biscuit toffee marzipan jelly oat cake marzipan sugar plum dessert
+            dessert. Icing gingerbread jelly gummies sweet roll. Apple pie
+            cotton candy jelly pudding cupcake icing.
+          </p>
+          <p aria-hidden="true">
+            Chocolate oat cake danish toffee sweet roll dragée brownie oat cake.
+            Sweet roll macaroon gummi bears caramels donut. Sugar plum pie candy
+            candy canes fruitcake tootsie roll muffin. Bonbon pudding sweet
+            sugar plum oat cake. Danish cake sugar plum danish chupa chups jelly
+            beans. Shortbread chupa chups soufflé jelly-o lemon drops. Cake
+            topping toffee ice cream shortbread tiramisu topping ice cream
+            gummies. Powder bear claw wafer caramels brownie bear claw croissant
+            tart. Halvah chocolate cake icing brownie carrot cake pudding
+            biscuit. Chocolate cake liquorice chocolate cake apple pie lemon
+            drops fruitcake ice cream cake. Danish chocolate bar pie muffin
+            candy canes liquorice jelly powder sweet. Macaroon jujubes soufflé
+            croissant macaroon lemon drops cotton candy tart brownie. Wafer
+            jujubes dessert oat cake muffin gingerbread candy chupa chups.
+            Pudding fruitcake topping chupa chups jelly topping candy canes.
+          </p>
+          <p aria-hidden="true">
+            Icing shortbread marzipan sugar plum cookie soufflé. Macaroon chupa
+            chups sugar plum brownie fruitcake. Bear claw chupa chups
+            marshmallow carrot cake marzipan shortbread topping toffee biscuit.
+            Candy canes tiramisu brownie halvah pastry jujubes lollipop caramels
+            wafer. Sweet roll candy canes oat cake toffee croissant cupcake.
+            Jelly beans chocolate bar chocolate bar tart bonbon macaroon
+            chocolate bar marshmallow. Apple pie oat cake apple pie halvah
+            soufflé. Jujubes shortbread jelly apple pie ice cream liquorice
+            topping. Jelly beans soufflé liquorice danish dragée. Tootsie roll
+            halvah shortbread sugar plum chocolate. Croissant dragée cheesecake
+            sweet jelly-o marshmallow tiramisu. Lemon drops cookie dessert
+            marzipan sweet biscuit. Brownie dessert jelly-o sugar plum dessert.
+          </p>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog
+      id="modal-from-modal-1"
+      class="nano-modal nano-modal--base"
+      aria-label="Open another modal from this modal"
+    >
+      <div class="nano-modal__wrapper">
+        <div class="nano-modal__content">
+          <button
+            data-nm-close
+            class="nano-modal__close-button"
+            aria-label="Close modal"
+          >
+            Close
+          </button>
+
+          <h2>Open another modal from this modal</h2>
+
+          <button class="btn mb" data-nm-open="modal-from-modal-2">
+            Open another modal
+          </button>
+
+          <p>
+            Nano allows you to open another modal from within a modal, but the
+            current modal will be closed automatically. Like Highlander, there
+            can be only one.
+          </p>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog
+      id="modal-from-modal-2"
+      class="nano-modal nano-modal--base"
+      aria-label="This modal is opened from another modal"
+    >
+      <div class="nano-modal__wrapper">
+        <div class="nano-modal__content">
+          <button
+            data-nm-close
+            class="nano-modal__close-button"
+            aria-label="Close modal"
+          >
+            Close
+          </button>
+
+          <h2>Another modal</h2>
+
+          <button class="btn mb" data-nm-open="modal-from-modal-1">
+            Open the previous modal
+          </button>
+
+          <p>
+            This modal is opened from another modal. You can close it or open
+            the previous modal.
+          </p>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog
+      id="modal-custom-styles"
+      class="nano-modal custom-modal"
+      aria-label="Modal with custom styles"
+    >
+      <div class="nano-modal__wrapper">
+        <div class="nano-modal__content">
+          <button
+            data-nm-close
+            class="nano-modal__close-button"
+            aria-label="Close modal"
+          >
+            Close
+          </button>
+
+          <h2>Custom styling</h2>
+
+          <p>
+            You can use CSS to customize Nano and it's animations. Check the
+            styling section for more details.
+          </p>
+        </div>
+      </div>
+    </dialog>
+
+    <div id="debug">
+      <button class="btn" data-nm-open="modal-long">
+        <span>Open long</span>
+      </button>
+      <button class="btn" data-nm-open="modal-base">Open short</button>
+      <button class="btn btn--accent-2 toggle-content">Toggle content</button>
+      <button class="btn btn--accent-2 toggle-scrollbar-width">
+        Toggle scrollbar width
+      </button>
+      <button class="btn btn--accent-2 destroy">Destroy</button>
+      <button class="btn btn--accent-2 init">Init</button>
+    </div>
+
+    <script type="module" src="/src/demo.ts"></script>
+  </body>
+</html>

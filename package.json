@@ -1,0 +1,39 @@
+{
+  "name": "@stanko/nano-modal",
+  "version": "0.1.0",
+  "type": "module",
+  "types": "./dist/nano-modal.d.ts",
+  "main": "./dist/nano-modal.js",
+  "files": [
+    "./dist"
+  ],
+  "scripts": {
+    "start": "vite",
+    "preview": "vite preview",
+    "build": "tsc && rm -rf ./docs && vite build && touch ./docs/.nojekyll",
+    "build-lib": "rm -rf ./dist && tsc -p ./tsconfig-lib.json && npm run minify && npm run build-css",
+    "build-css": "sass ./src/scss/nano-modal.scss ./dist/nano-modal.css",
+    "minify": "esbuild ./dist/nano-modal.js --minify --outfile=./dist/nano-modal.min.js",
+    "prepare": "cp ./pre-commit ./.git/hooks/pre-commit && chmod +x ./.git/hooks/pre-commit"
+  },
+  "devDependencies": {
+    "@types/prismjs": "^1.26.5",
+    "prismjs": "^1.30.0",
+    "sass": "^1.92.1",
+    "typescript": "~5.8.3",
+    "vite": "^7.1.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Stanko/nano-modal.git"
+  },
+  "keywords": [
+    "modal",
+    "dialog"
+  ],
+  "author": "Stanko",
+  "bugs": {
+    "url": "https://github.com/Stanko/nano-modal/issues"
+  },
+  "homepage": "https://muffinman.io/nano-modal"
+}

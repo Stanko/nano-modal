@@ -1,0 +1,225 @@
+@use "breakpoints.scss";
+
+:root {
+  // Backdrop (global)
+  --nm-backdrop-color: rgb(0 0 0 / 0.7);
+  --nm-backdrop-filter: blur(10px);
+
+  // Scrollbar
+  --nm-scrollbar-track-color: transparent;
+  --nm-scrollbar-thumb-color: rgb(255 255 255 / 0.5);
+
+  // Content
+  --nm-radius: 20px; // Border radius used for the base theme
+  --nm-max-width: 50rem;
+  --nm-background: white;
+
+  // Animation
+  --nm-duration: 350ms;
+
+  // Close button
+  --nm-close-top: 0; // Sticky position
+  --nm-close-margin: 0;
+
+  // For internal use only, don't change these
+  --nm-scrollbar-width: 0;
+  --nm-scroll-position: 0;
+}
+
+.nano-modal,
+.nano-modal__backdrop,
+.nano-modal__wrapper,
+.nano-modal__content,
+.nano-modal__close-button {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.nano-modal {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  border: none;
+  background: none;
+  color: inherit;
+  touch-action: auto;
+  outline: none;
+  overscroll-behavior: none;
+
+  // This transition is not used to animate things in the UI
+  // Instead it is used to read the transition duration variable in JavaScript
+  // This way the library knows if and how long it should wait
+  // for the transition to finish before closing the dialog element
+  transition: opacity var(--nm-duration);
+
+  // Needed for Safari
+  position: fixed;
+  inset: 0;
+
+  scrollbar-width: thin;
+  scrollbar-color: var(--nm-scrollbar-thumb-color)
+    var(--nm-scrollbar-track-color);
+}
+
+// "Fake" transition that is not actually visible in the UI
+// but ensures that the transitionend event is fired
+.nano-modal--closing[open] {
+  opacity: 0.999;
+}
+
+.nano-modal::backdrop {
+  opacity: 0;
+  background-color: transparent;
+}
+
+.nano-modal__backdrop {
+  background: var(--nm-backdrop-color);
+  backdrop-filter: var(--nm-backdrop-filter);
+  opacity: 1;
+  display: none;
+  transition:
+    opacity var(--nm-duration),
+    transform var(--nm-duration),
+    backdrop-filter var(--nm-duration);
+  position: fixed;
+  inset: 0;
+}
+
+body:has(.nano-modal--closing[open]) .nano-modal__backdrop {
+  opacity: 0;
+}
+
+html:has(.nano-modal[open]) {
+  touch-action: none;
+  overflow: hidden;
+  height: 100%;
+}
+
+body:has(.nano-modal[open]) {
+  touch-action: none;
+  overflow: hidden;
+  position: fixed;
+  inset: 0;
+  inset-inline-end: var(--nm-scrollbar-width);
+  inset-block-start: var(--nm-negative-margin);
+}
+
+body:has(.nano-modal[open]) .nano-modal__backdrop {
+  display: block;
+}
+
+.nano-modal__wrapper {
+  pointer-events: none;
+}
+
+.nano-modal__content {
+  background: var(--nm-background);
+  max-width: var(--nm-max-width);
+  pointer-events: all;
+  z-index: 0;
+  will-change: transform, opacity;
+  margin-inline: auto;
+  transition:
+    opacity var(--nm-duration),
+    transform var(--nm-duration);
+}
+
+.nano-modal__close-button {
+  color: inherit;
+  background: inherit;
+  z-index: 1;
+  float: inline-end;
+  position: sticky;
+  top: var(--nm-close-top);
+  margin: var(--nm-close-margin);
+  border: none;
+  cursor: pointer;
+}
+
+// ----- Animation ----- //
+
+body:has(.nano-modal[open]) .nano-modal__backdrop {
+  @starting-style {
+    opacity: 0;
+  }
+}
+
+.nano-modal[open] .nano-modal__content {
+  @starting-style {
+    opacity: 0;
+  }
+}
+
+.nano-modal--closing[open] {
+  .nano-modal__content {
+    opacity: 0;
+  }
+}
+
+// ----- Base theme ----- //
+
+.nano-modal--base {
+  --nm-close-top: 1rem;
+
+  &[open] .nano-modal__content {
+    @starting-style {
+      transform: translateY(3rem);
+    }
+  }
+
+  &.nano-modal--closing[open] {
+    .nano-modal__content {
+      transform: translateY(3rem);
+    }
+  }
+
+  .nano-modal__wrapper {
+    // On small screens modal is full width with empty space at the top when
+    // This is similar to iOS default modals
+    margin-block-start: 10vh; // vh units are added as a fallback
+    margin-block-start: 10dvh;
+    min-height: 90vh;
+    min-height: 90dvh;
+
+    // Positioning
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    margin-inline: auto;
+
+    // On medium screens center the modal
+    @include breakpoints.md {
+      padding-inline: 2rem;
+      margin-block: 4rem;
+      min-height: calc(100vh - 8rem);
+      min-height: calc(100dvh - 8rem);
+      justify-content: center;
+    }
+
+    // On large screens add some more padding
+    @include breakpoints.lg {
+      padding-inline: 4rem;
+      margin-block: 6rem;
+      min-height: calc(100vh - 12rem);
+      min-height: calc(100dvh - 12rem);
+    }
+  }
+
+  .nano-modal__content {
+    // On small screens round only the top corners
+    border-start-start-radius: var(--nm-radius);
+    border-start-end-radius: var(--nm-radius);
+
+    // On medium and large screens round all corners
+    @include breakpoints.md {
+      border-radius: var(--nm-radius);
+    }
+  }
+
+  .nano-modal__close-button {
+    padding: 0.75rem;
+    border-radius: 4px;
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "declaration": true,
+    "jsx": "react",
+    "moduleResolution": "node",
+    "pretty": true,
+    "resolveJsonModule": true,
+    "strict": true,
+    "lib": ["ES2020", "DOM"],
+    "module": "ES2020",
+    "outDir": "dist",
+    "target": "ES2020"
+  },
+  "exclude": ["node_modules", "dist"],
+  "include": ["src/lib/nano-modal.ts"]
+}
