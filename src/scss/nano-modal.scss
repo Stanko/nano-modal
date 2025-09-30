@@ -4,6 +4,7 @@
   // Backdrop (global)
   --nm-backdrop-color: rgb(0 0 0 / 0.7);
   --nm-backdrop-filter: blur(10px);
+  --nm-backdrop-z-index: 1;
 
   // Scrollbar
   --nm-scrollbar-track-color: transparent;
@@ -85,6 +86,7 @@
     backdrop-filter var(--nm-duration);
   position: fixed;
   inset: 0;
+  z-index: var(--nm-backdrop-z-index);
 }
 
 body:has(.nano-modal--closing[open]) .nano-modal__backdrop {
@@ -155,71 +157,5 @@ body:has(.nano-modal[open]) .nano-modal__backdrop {
 .nano-modal--closing[open] {
   .nano-modal__content {
     opacity: 0;
-  }
-}
-
-// ----- Base theme ----- //
-
-.nano-modal--base {
-  --nm-close-top: 1rem;
-
-  &[open] .nano-modal__content {
-    @starting-style {
-      transform: translateY(3rem);
-    }
-  }
-
-  &.nano-modal--closing[open] {
-    .nano-modal__content {
-      transform: translateY(3rem);
-    }
-  }
-
-  .nano-modal__wrapper {
-    // On small screens modal is full width with empty space at the top when
-    // This is similar to iOS default modals
-    margin-block-start: 10vh; // vh units are added as a fallback
-    margin-block-start: 10dvh;
-    min-height: 90vh;
-    min-height: 90dvh;
-
-    // Positioning
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    margin-inline: auto;
-
-    // On medium screens center the modal
-    @include breakpoints.md {
-      padding-inline: 2rem;
-      margin-block: 4rem;
-      min-height: calc(100vh - 8rem);
-      min-height: calc(100dvh - 8rem);
-      justify-content: center;
-    }
-
-    // On large screens add some more padding
-    @include breakpoints.lg {
-      padding-inline: 4rem;
-      margin-block: 6rem;
-      min-height: calc(100vh - 12rem);
-      min-height: calc(100dvh - 12rem);
-    }
-  }
-
-  .nano-modal__content {
-    // On small screens round only the top corners
-    border-start-start-radius: var(--nm-radius);
-    border-start-end-radius: var(--nm-radius);
-
-    // On medium and large screens round all corners
-    @include breakpoints.md {
-      border-radius: var(--nm-radius);
-    }
-  }
-
-  .nano-modal__close-button {
-    padding: 0.75rem;
-    border-radius: 4px;
   }
 }

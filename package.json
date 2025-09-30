@@ -1,9 +1,15 @@
 {
   "name": "@stanko/nano-modal",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "type": "module",
   "types": "./dist/nano-modal.d.ts",
-  "main": "./dist/nano-modal.js",
+  "exports": {
+    ".": {
+      "import": "./dist/nano-modal.js"
+    },
+    "./style.css": "./dist/nano-modal.css",
+    "./base-theme.css": "./dist/nano-modal-base-theme.css"
+  },
   "files": [
     "./dist"
   ],

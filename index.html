@@ -228,8 +228,11 @@
           <pre><code class="language-typescript">// Import the library
 import { init } from '@stanko/nano-modal';
 
-// Import CSS
-import "@stanko/nano-modal/dist/nano-modal.css";
+// Add mandatory CSS
+import "@stanko/nano-modal/style.css";
+
+// Add the base theme (optional)
+import "@stanko/nano-modal/base-theme.css";
 
 // Initialize NanoModal
 init();</code></pre>
@@ -310,6 +313,7 @@ form.addEventListener("submit", () => {
   /* Backdrop (global, shared between all modals) */
   --nm-backdrop-color: rgb(0 0 0 / 0.7);
   --nm-backdrop-filter: blur(10px);
+  --nm-backdrop-z-index: 1;
 
   /* Scrollbar */
   --nm-scrollbar-track-color: transparent;
