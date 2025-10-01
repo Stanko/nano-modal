@@ -4,7 +4,10 @@
   // Backdrop (global)
   --nm-backdrop-color: rgb(0 0 0 / 0.7);
   --nm-backdrop-filter: blur(10px);
-  --nm-backdrop-z-index: 1;
+
+  // Z-index
+  --nm-backdrop-z-index: 0;
+  --nm-z-index: 1;
 
   // Scrollbar
   --nm-scrollbar-track-color: transparent;
@@ -48,6 +51,7 @@
   touch-action: auto;
   outline: none;
   overscroll-behavior: none;
+  z-index: var(--nm-z-index);
 
   // This transition is not used to animate things in the UI
   // Instead it is used to read the transition duration variable in JavaScript
