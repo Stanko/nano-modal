@@ -1,6 +1,13 @@
 @use "breakpoints.scss";
 @use "synthax.scss";
 
+@use "nano-modal.scss";
+
+// The unholy selector to prevent the base theme being applied onto the unstyled modal
+:root:has(.nano-modal[open]:not(#modal-unstyled)) {
+  @import "nano-modal-base-theme.scss";
+}
+
 :root {
   --bg: #fdfdff;
   --fg: #223;
@@ -432,6 +439,11 @@ pre code {
     var(--stripes-color-2) var(--stripes-thickness),
     var(--stripes-color-2) calc(var(--stripes-thickness) * 2)
   );
+}
+
+// modal-unstyled
+
+#modal-unstyled {
 }
 
 // Typography for the base modal

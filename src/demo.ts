@@ -1,8 +1,6 @@
 import "prismjs";
 import "prismjs/components/prism-typescript";
 
-import "./scss/nano-modal.scss";
-import "./scss/nano-modal-base-theme.scss";
 import "./scss/demo.scss";
 
 import {
