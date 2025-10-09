@@ -479,7 +479,8 @@ pre code {
   --nm-backdrop-filter: blur(100px);
 }
 
-.custom-modal {
+// Another unholy selector to override the first one
+:root:has(.custom-modal[open]:not(#modal-unstyled)) .custom-modal {
   --nm-close-top: 1rem;
   --nm-duration: 500ms;
   --nm-max-width: 30rem;
