@@ -24,8 +24,15 @@ export const init = () => {
 };
 
 export const open = (modal: HTMLDialogElement) => {
-  return new Promise<HTMLDialogElement>((resolve) => {
-    if (!modal || modal.open) {
+  return new Promise<HTMLDialogElement>((resolve, reject) => {
+    if (!modal) {
+      // Element doesn't exist
+      reject();
+    }
+
+    if (modal.open) {
+      // Already open
+      resolve(modal);
       return;
     }
 

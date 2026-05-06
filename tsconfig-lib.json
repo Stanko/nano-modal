@@ -4,15 +4,16 @@
     "esModuleInterop": true,
     "declaration": true,
     "jsx": "react",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "pretty": true,
     "resolveJsonModule": true,
     "strict": true,
     "lib": ["ES2020", "DOM"],
     "module": "ES2020",
+    "rootDir": "./src/lib",
     "outDir": "dist",
-    "target": "ES2020"
+    "target": "ES2020",
   },
   "exclude": ["node_modules", "dist"],
-  "include": ["src/lib/nano-modal.ts"]
+  "include": ["src/lib/nano-modal.ts"],
 }

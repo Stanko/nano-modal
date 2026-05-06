@@ -1,6 +1,6 @@
 # Nano Modal
 
-A tiny (850 bytes), opinionated modal library.
+A tiny (860 bytes), opinionated modal library.
 
 [![Screenshot of NanoModal](./public/screenshot.png)](https://muffinman.io/nano-modal)
 

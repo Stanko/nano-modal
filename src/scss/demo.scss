@@ -2,10 +2,12 @@
 @use "synthax.scss";
 
 @use "nano-modal.scss";
+@use "nano-modal-base-theme-mixin.scss";
 
 // The unholy selector to prevent the base theme being applied onto the unstyled modal
+// Basically apply it only the base theme only if the nano modal is opened, but it is not the untyled one
 :root:has(.nano-modal[open]:not(#modal-unstyled)) {
-  @import "nano-modal-base-theme.scss";
+  @include nano-modal-base-theme-mixin.base-theme;
 }
 
 :root {
@@ -411,8 +413,8 @@ pre code {
   min-width: 0;
 }
 
-.content {
-}
+// .content {
+// }
 
 .content > * + * {
   margin-top: 1em;
@@ -443,8 +445,8 @@ pre code {
 
 // modal-unstyled
 
-#modal-unstyled {
-}
+// #modal-unstyled {
+// }
 
 // Typography for the base modal
 
